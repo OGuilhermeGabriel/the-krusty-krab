@@ -1,0 +1,62 @@
+------------------- SISTEMA DE GERENCIAMENTO ---------------------
+
+FEATURES: 
+
+- Cadastro de um cardápio 
+- Gerenciamento de pedidos 
+- Controle de status de cada pedidos 
+
+
+> [REGISTRO] CARDÁPIO: NOME, DESCRIÇÃO, PREÇO, CATEGORIA 
+> [REGISTRO] PEDIDOS: IDENTIFICAÇÃO, DADOS DO CLIENTE, LISTA DE ITENS, STATUS (PENDENTE, EM PREPARO, PRONTO, ENTREGUE)
+
+> [??? ALGUMA ESTRUTURA DINÂMICA] GERENCIAMENTO DE STATUS: precisa ter inclusão, remoção e atualização (CRUD)
+
+FUNCIONALIDADES OBRIGATÓRIAS:
+
+- Cadastro do Cardápio: 
+
+Cada item deve possuir atribuitos: nome, descrição, preço e categoria. (utilizando enumerações para definir as categorias. ex: entrada, principal, sobremesa, bebida).
+Permitir a inserção, remoção e atualização de itens do cardápio. 
+
+DÚVIDA: Seria uma boa criar funções para inserir, remover e atualizar os itens/registros do cardápio ?
+
+CERTEZA: Cardápio será uma struct que irá ser caracterizada pelos membros: nome, descrição, preço e categoria. Onde categoria será uma enumeração.
+
+- Gerenciamento de Pedidos: 
+
+Cada pedido de conter: um identificador, dados do cliente, itens do pedido (referenciando itens do cardápio) e status (usando enumerações. ex: pendente, em_preparo, pronto, entregue)
+
+CERTEZA: Pedidos serão vindos de uma struct que irá ser caracterizada pelos membros. Identificador, dados do cliente, itens de pedido (registros vindos da struct de cardápio) e status (já mencionado, uma enumeração)
+
+DÚVIDA: Para o membro "Identificador", o que seria ele ? Um número randômico gerado ? O número da mesa ? 
+DÚVIDA: Para o documento dados do cliente, ele poderia ser feito por meio de outra struct ? Se sim, quais seriam esses membros já que o documento não deixa claro ? Nome, Idade, E-mail, Endereço 
+
+
+- COISAS PARA FAZER:
+
+> ENUM DE CATEGORIA
+	- DADOS ENUMERADOS: ENTRADA, PRINCIPAL, SOBREMESA, BEBIDA
+> ENUM DE STATUS
+	- DADOS ENUMERADOS: PENDENTE, EM_PREPARO, PRONTO, ENTREGUE
+> STRUCT DE DADOS DO CLIENTE
+	MEMBROS: NOME, IDADE, E-MAIL, ENDEREÇO
+> STRUCT DE CARDÁPIO
+	MEMBROS: NOME, DESCRIÇÃO, PREÇO, CATEGORIA (ENUM)
+> FUNÇÕES DE CRUD DO CARDÁPIO
+	~ INSERÇÃO DE ITEM DO CARDÁPIO 
+	~ REMOÇÃO DE ITEM DO CARDÁPIO
+	~ ATUALIZAÇÃO DE ITEM DO CARDÁPIO
+> STRUCT DE PEDIDOS
+	MEMBROS: IDENTIFICADOR, DADOS DO CLIENTE (REGISTRO DE STRUCT), ITENS DO PEDIDO (REGISTRO DE STRUCT), STATUS (ENUM)
+> FUNÇÕES DE CRUD DOS PEDIDOS (GERENCIAMENTO DE PEDIDOS): Em cada função, o registro de pedidos irá alterar o seu status  
+	~ CRIAÇÃO DE PEDIDOS: Status - EM_PREPARO 
+	~ ALTERAÇÃO DE PEDIDOS: Status - PENDENTE ou PRONTO
+	~ FINALIZAÇÃO DE PEDIDOS: Status - ENTREGUE
+
+- DÚVIDAS CORRENTES 
+
+1) Para fins de organização, é recomendável separar o código em arquivos diferentes ? Se sim, eu deveria separar por quais tópicos e como eu separaria para se conectar com o arquivo main ?
+
+2) Onde eu posso aplicar as especificações técnicas nessa estrutura que montei. Ex: posso colocar que, nas funções de CRUD, irei passar um ponteiro do membro status para alterar o seu status quando os pedidos forem alterados. Ou seja, dada a estrutura que eu montei para o projeto em "Coisas para fazer", como eu posso implementar as especificações tecnicas como: uso de ponteiros, mainuplação de strings com ponteiros, alocação dinâmica de memória, vetores dinâmicos, registros(structs) e enumerações ? 
+
