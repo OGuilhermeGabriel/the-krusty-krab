@@ -25,7 +25,7 @@ CERTEZA: Cardápio será uma struct que irá ser caracterizada pelos membros: no
 
 - Gerenciamento de Pedidos: 
 
-Cada pedido de conter: um identificador, dados do cliente, itens do pedido (referenciando itens do cardápio) e status (usando enumerações. ex: pendente, em_preparo, pronto, entregue)
+Cada pedido deve conter: um identificador, dados do cliente, itens do pedido (referenciando itens do cardápio) e status (usando enumerações. ex: pendente, em_preparo, pronto, entregue)
 
 CERTEZA: Pedidos serão vindos de uma struct que irá ser caracterizada pelos membros. Identificador, dados do cliente, itens de pedido (registros vindos da struct de cardápio) e status (já mencionado, uma enumeração)
 
@@ -43,7 +43,7 @@ DÚVIDA: Para o documento dados do cliente, ele poderia ser feito por meio de ou
 	MEMBROS: NOME, IDADE, E-MAIL, ENDEREÇO
 > STRUCT DE CARDÁPIO
 	MEMBROS: NOME, DESCRIÇÃO, PREÇO, CATEGORIA (ENUM)
-> FUNÇÕES DE CRUD DO CARDÁPIO
+> FUNÇÕES DE CRUD DO CARDÁPIO 
 	~ INSERÇÃO DE ITEM DO CARDÁPIO 
 	~ REMOÇÃO DE ITEM DO CARDÁPIO
 	~ ATUALIZAÇÃO DE ITEM DO CARDÁPIO
@@ -59,4 +59,3 @@ DÚVIDA: Para o documento dados do cliente, ele poderia ser feito por meio de ou
 1) Para fins de organização, é recomendável separar o código em arquivos diferentes ? Se sim, eu deveria separar por quais tópicos e como eu separaria para se conectar com o arquivo main ?
 
 2) Onde eu posso aplicar as especificações técnicas nessa estrutura que montei. Ex: posso colocar que, nas funções de CRUD, irei passar um ponteiro do membro status para alterar o seu status quando os pedidos forem alterados. Ou seja, dada a estrutura que eu montei para o projeto em "Coisas para fazer", como eu posso implementar as especificações tecnicas como: uso de ponteiros, mainuplação de strings com ponteiros, alocação dinâmica de memória, vetores dinâmicos, registros(structs) e enumerações ? 
-
