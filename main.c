@@ -48,7 +48,6 @@ void clear();
 
 //prototipando as funções de alteração de pedidos 
 void pedido_add(pedidos **listaPedidos, int *numPedidos, char *identificador, cliente cliente1, cardapio *item, int numitens);
-void pedido_delete(pedidos **pedidos1, int *numPedidos, char *identificador);
 void pedido_fetch(pedidos *pedidos1, int numPedidos, char *identificador, status novoStatus);
 void pedido_list(pedidos *pedidos1, int numPedidos);
 
@@ -68,11 +67,12 @@ int main(){
         printf("\n==== SISTEMA DE GERENCIAMENTO DE PEDIDOS ====\n");
         printf("1 - Adicionar Item ao Cardápio\n");
         printf("2 - Remover Item do Cardápio\n");
-        printf("3 - Criar Pedido\n");
-        printf("4 - Alterar Status do Pedido\n");
+        printf("3 - Criar Pedido\n");       
+        printf("4 - Alterar Status do Pedido\n");                                               
         printf("5 - Listar Pedidos\n");
         printf("6 - Listar Cardápio\n");
-        printf("7 - Sair\n");
+        printf("7 - Atualizar Item do Cardápio\n");
+        printf("8 - Sair\n");
         printf("\nEscolha uma opção: ");
         scanf("%d", &opcao);
         getchar(); //limpar buffer do teclado
@@ -101,6 +101,7 @@ int main(){
                 scanf("%d", &cat);
 
                 cardapio_add(&menu, &tamanhomenu,nome, descricao, preco, (categoria)cat);
+                printf("Item adicionado no cardápio com sucesso!\n");
                 break;}
             case 2:{
                 clear();
@@ -117,6 +118,8 @@ int main(){
 
                 // Chamando a função
                 cardapio_delete(&menu, &tamanhomenu, nome);
+                // retorno da função ao usuário
+                printf("Item removido do cardápio com sucesso!\n");
                 break;}
             case 3:{
                 clear();
@@ -182,7 +185,7 @@ int main(){
                     }
                 }
 
-                // Criar um registro de cliente para associá-lo ao pedido
+                //criando um registro de cliente para associá-lo ao pedido
                 cliente clientenovo; 
                 clientenovo.nome = strdup(nomeCliente);
                 clientenovo.idade = idade; 
@@ -211,8 +214,11 @@ int main(){
 
                 printf("Novo status do pedido (0 = PENDENTE, 1 = EM_PREPARO, 2 = PRONTO, 3 = ENTREGUE): ");
                 scanf("%d", &novoStatus);
-
+                
+                //chamando a função de pedidofetch
                 pedido_fetch(listadepedidos, numPedidos, identificador, (status)novoStatus);
+                //retorno ao usuário
+                printf("Pedido [%s] atualizado com sucesso!\n", identificador);
                 break;
             case 5:
                 clear();
@@ -226,16 +232,50 @@ int main(){
                 break;                
             case 7:
                 clear();
+                // Chamar a função de atualizar o cardápio - cardapiofetch
+                
+                //verificando se há itens no cardápio
+                if (tamanhomenu == 0) {
+                    printf("Erro: Não há itens no cardápio para atualizar!\n");
+                    break;
+                }
+
+                //inputs necessários para atualizar um item do cardápio
+                char nome[50], novaDescricao[100];
+                float novoPreco;
+                int novaCategoria;
+
+                printf("Nome do item a ser atualizado: ");
+                fgets(nome, sizeof(nome), stdin);
+                nome[strcspn(nome, "\n")] = 0;
+
+                printf("Nova descrição: ");
+                fgets(novaDescricao, sizeof(novaDescricao), stdin);
+                novaDescricao[strcspn(novaDescricao, "\n")] = 0;
+
+                printf("Novo preço: ");
+                scanf("%f", &novoPreco);
+
+                printf("Nova categoria (0 = ENTRADA, 1 = PRINCIPAL, 2 = SOBREMESA, 3 = BEBIDA): ");
+                scanf("%d", &novaCategoria);
+
+                //chamando a função de atualização
+                cardapio_fetch(menu, tamanhomenu, nome, novaDescricao, novoPreco, (categoria)novaCategoria);
+                //retorno da função
+                printf("Item do cardápio atualizado com sucesso!\n");
+                break;
+            case 8:
+                clear();
                 printf("Saindo do sistema...\n");
                 break;
             default:
                 clear();
                 printf("Opção inválida! Digite novamente!\n");
         }
-    } while (opcao != 7);
+    } while (opcao != 8);
 
     return (0);
-}
+}   
 
 //FUNÇÃO DE LIMPAR A TELA
 void clear(){
@@ -249,7 +289,7 @@ void clear(){
 //FUNÇÕES DE CRUD DOS PEDIDOS
 
 void pedido_add(pedidos **pedidos1, int *numPedidos, char *identificador, cliente cliente1, cardapio *item, int numitens){
-    //realocando vetor de pedidos
+    //realocando a memória do vetor de pedidos1, já que um novo pedido está sendo adicionado... o sistema necessita de mais memória
     *pedidos1 = realloc(*pedidos1, (*numPedidos+1) * sizeof(pedidos));
 
     //tratamento de erro de alocação de memória
@@ -290,50 +330,17 @@ void pedido_add(pedidos **pedidos1, int *numPedidos, char *identificador, client
     printf("Pedido [%s] criado com sucesso!\n", identificador);
 }
 
-void pedido_delete(pedidos **pedidos1, int *numPedidos, char *identificador){
-    //implementar o laço for para achar o pedido
-    for (int i = 0; i < *numPedidos; i++){
-        if(strcmp((*pedidos1)[i].identificador, identificador) == 0 ){
-            //pedido achado, espaço liberado
-            free((*pedidos1)[i].item);
-            free((*pedidos1)[i].cliente1.nome);
-            free((*pedidos1)[i].cliente1.endereco);
-            free((*pedidos1)[i].cliente1.email);
-            
-            //movendo os pedidos restantes na memória para preencher o espaço vazio 
-            for (int j = i; j < (*numPedidos)-1; j++){
-                (*pedidos1)[j] = (*pedidos1)[j+1];
-            }
-
-            //reduzindo o tamanho do vetor da lista de pedidos 
-            pedidos *temp = realloc(*pedidos1, (*numPedidos-1) * sizeof(pedidos));
-            if (temp || *numPedidos-1 == 0){
-                *pedidos1 = temp; 
-                (*numPedidos)--; 
-            } else {
-                printf("Erro na realoação de memória \n");
-            }
-            
-            //saída da função delete
-            printf("Pedido [%s] removido com sucesso!\n", identificador);
-            return; 
-        }
-    }
-    //caso o pedido não seja achado
-    printf("Pedido [%s] não encontrado!\n", identificador);
-}
-
 void pedido_fetch(pedidos *pedidos1, int numPedidos, char *identificador, status novoStatus){
     //procurando o pedido beasado no identificador 
     for (int i = 0; i < numPedidos; i++){
-        //condição para achar o número id
+        //condição para achar o pedido pelo número id
         if (strcmp(pedidos1[i].identificador, identificador) == 0){
-            pedidos1[i].status1 = novoStatus;
-            printf("Pedido [%s] atualizado para STATUS: %d\n", identificador, novoStatus);
+            pedidos1[i].status1 = novoStatus; //aleterando para o novo status
+            printf("Pedido [%s] atualizado para STATUS: %d\n", identificador, novoStatus); //retorno da função
             return;
         }
     }
-    //caso não encontre o pedido
+    //caso não encontre o pedido a ser atualizado
     printf("Pedido [%s] não encontrado!\n", identificador);
     return;
 }
@@ -367,35 +374,45 @@ void pedido_list(pedidos *pedidos1, int numPedidos){
 }
 
 //FUNÇÕES DE CRUD DO CARDÁPIO
+// FUNÇÃO CARDAPIO_ADD()
 void cardapio_add(cardapio **cardapio1, int *tamanho, char *nome, char *descricao, float preco, categoria tipo){
     *cardapio1 = realloc(*cardapio1, (*tamanho+1) * sizeof(cardapio));
     
-    //tratamento de erros
+    // Tratamento de erros - caso a dimensão do registro de cardápio seja nulo
     if (*cardapio1 == NULL){
         printf("Erro na alocação de memória!\n");
         exit(1);
     }
 
+    // Alocando "nome" e "descricao" na memória utilizando os ponteiros da instância do cardápio (cardapio1) com o tamanho do cardapio. Essa alocação toma como base o comprimento das strings de "nome" e "descricao" para reservar a quantidade suficiente na memória
     (*cardapio1)[*tamanho].nome = malloc(strlen(nome) + 1);
     (*cardapio1)[*tamanho].descricao = malloc(strlen(descricao) + 1);
 
-    //tratamento de erros - alocação de memória das strings "nome" e "descrição"
+    // Tratamento de erros - caso alocação de memória das strings "nome" e "descrição" não ocorra
     if (!(*cardapio1)[*tamanho].nome || !(*cardapio1)[*tamanho].descricao) {
         printf("Erro na alocação de memória!\n");
         exit(1);
     }
-    
+
+    // Acessando cada um dos campos do item que está sendo criado e copiando o valor para dentro
     strcpy((*cardapio1)[*tamanho].nome, nome);  
+    // A string em "descricao" está sendo copiada para o campo descrição o qual está sendo apontado pelo *tamanho, o qual está sendo apontado por **cardapio1
     strcpy((*cardapio1)[*tamanho].descricao, descricao);  
+    // Não há necessidade de utilizar a função "strcpy()" uma vez que a atribuição será feita por valor diferentes de strings
     (*cardapio1)[*tamanho].preco = preco;
     (*cardapio1)[*tamanho].categoria1 = tipo; 
 
+    // Ao final da adição do item, o valor de tamanho irá aumentar. Afinal, mais um item foi adicionado ao cardápio e, portanto, seu tamanho aumentou
     (*tamanho)++;
 }
 
 void cardapio_delete(cardapio **cardapio1, int *tamanho, char *nome){
+
+    // Iterando até achar o item que será deletado
     for (int i=0; i < *tamanho; i++){
+        //achando e comparando o nome que está dentro do item 'i' do cardápio
         if (strcmp((*cardapio1)[i].nome, nome) == 0){
+            //liberando o espaço de memória do nome 
             free((*cardapio1)[i].nome);
             free((*cardapio1)[i].descricao);
                 
@@ -403,12 +420,13 @@ void cardapio_delete(cardapio **cardapio1, int *tamanho, char *nome){
                 (*cardapio1)[j] = (*cardapio1)[j+1];
             }
             
+            //realocando o espaço de memória, uma vez que um item do cardápio fora deletado
             cardapio *temp = realloc(*cardapio1, (*tamanho-1) * sizeof(cardapio));
             if (temp || *tamanho-1 == 0){
-                *cardapio1 = temp;
-                (*tamanho) --; 
+                *cardapio1 = temp; //valor temporário no cardápio1 
+                (*tamanho) --; //diminuindo o tamanho do cardápio
             } else {
-                printf("Erro na realocação de memória!\n");
+                printf("Erro na realocação de memória!\n"); //caso "realloc" não funcione
             }
             return;
         }
@@ -417,18 +435,21 @@ void cardapio_delete(cardapio **cardapio1, int *tamanho, char *nome){
 
 void cardapio_fetch(cardapio *cardapio1, int tamanho, char *nome, char *novaDescricao, float novoPreco, categoria novoTipo){
     for(int i = 0; i < tamanho; i++){
+        //achando o item a ser atualizado
         if (strcmp(cardapio1[i].nome, nome) == 0){
+            //liberando o espaço da descrição
             free(cardapio1[i].descricao);
+            //alterando os membros do registro 'i' do cardápio
             cardapio1[i].descricao = strdup(novaDescricao);
             cardapio1[i].preco = novoPreco;
             cardapio1[i].categoria1 = novoTipo;
             return; 
         }
-    }
+    }   
 }
 
 void cardapio_list(cardapio *cardapio1, int tamanho){
-    //caso o cardapio não tenha itens registrados nele 
+    //caso o cardapio não tenha itens registrados nele   
     if (tamanho == 0){
         printf("O cardápio está vazio!\n");
         return; 
