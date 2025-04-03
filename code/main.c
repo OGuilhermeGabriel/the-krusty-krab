@@ -1,8 +1,10 @@
-//esta é a função principal 
+//this is the main function  
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "functions.h" 
+#include "functions.h" //inclunding functions.h
+#include <unistd.h> //to do sleep() in linux/macOS
+//#include <windows.h> //uncomment this if you're in windowsOS and use Sleep(ms)
 
 int main (){
 	Order *orderList = NULL; 
@@ -10,7 +12,8 @@ int main (){
 	Menu *menu = NULL; 
 
     do {
-        printf("\n===== MENU =====\n");
+        printf("\n=========== THE KRUSTY KRAB MAIN MENU ===========\n\n");
+	drawMrKrabs();
         printf("1. Add menu item\n");
         printf("2. Remove menu item\n");
         printf("3. Update menu item\n");
@@ -29,6 +32,8 @@ int main (){
                 char name[50], description[100];
                 float price;
                 int category;
+		
+		printf("====== ADDING A NEW MENU ITEM ======\n\n");
 
                 printf("Enter item name: ");
                 fgets(name, sizeof(name), stdin);
@@ -53,6 +58,10 @@ int main (){
             case 2: { // Remove menu item
 		clear_screen();
                 char name[50];
+
+		
+		printf("====== REMOVING A MENU ITEM ======\n\n");
+
                 printf("Enter the name of the item to remove: ");
                 fgets(name, sizeof(name), stdin);
                 name[strcspn(name, "\n")] = 0;
@@ -66,7 +75,9 @@ int main (){
                 float newPrice;
                 int newCategory;
 
-                printf("Enter item name to update: ");
+		printf("====== UPDATING A MENU ITEM ======\n\n");
+                
+		printf("Enter item name to update: ");
                 fgets(name, sizeof(name), stdin);
                 name[strcspn(name, "\n")] = 0;
 
@@ -97,7 +108,9 @@ int main (){
                 char customerName[50], address[100], email[50];
                 int itemCount;
 
-                printf("Enter order ID: ");
+		printf("====== ADDING A NEW ORDER ======\n\n");
+                
+		printf("Enter order ID: ");
                 fgets(id, sizeof(id), stdin);
                 id[strcspn(id, "\n")] = 0;
 
@@ -162,7 +175,9 @@ int main (){
                 char id[10];
                 int status;
 
-                printf("Enter order ID to update: ");
+		printf("====== UPDATING ORDER STATUS ======\n\n");
+                
+		printf("Enter order ID to update: ");
                 fgets(id, sizeof(id), stdin);
                 id[strcspn(id, "\n")] = 0;
 
@@ -181,9 +196,12 @@ int main (){
 
             case 0:
 		clear_screen();
-                printf("Exiting...\n");
+		for (int i=3; i>0; i--){
+			printf("Exiting the program in... %d\n", i);
+			fflush(stdout); 
+			sleep(1);
+		}
                 break;
-
             default:
 		clear_screen();
                 printf("Invalid option! Try again.\n");

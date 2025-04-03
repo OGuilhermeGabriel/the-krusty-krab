@@ -6,6 +6,8 @@
 //function to clear the screen 
 void clear_screen();
 
+//MrKrabs drawing 
+void drawMrKrabs();
 // Order management functions
 void add_order(Order **orderList, int *orderCount, char *id, Customer customer, Menu *items, int itemCount);
 void update_order_status(Order *orderList, int orderCount, char *id, OrderStatus newStatus);
