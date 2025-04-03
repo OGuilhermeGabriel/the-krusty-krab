@@ -1,4 +1,4 @@
-# The Krusty Krab Menu and Order Management System
+# The Krusty Krab Menu and Order Management System (On progress)
 
 ![the_krusty_krab](/assets/The_Krusty_Krab.png)
 
