@@ -27,7 +27,7 @@ int main (){
         getchar(); // Clear buffer
 
         switch (option) {
-            case 1: { // Add menu itemi
+            case 1: { // Add menu item
 		clear_screen();
                 char name[50], description[100];
                 float price;
@@ -130,9 +130,9 @@ int main (){
                 scanf("%d", &itemCount);
                 getchar();
 
-                if (itemCount > menuSize || itemCount <= 0) {
+                if (itemCount <= 0) {
                     printf("Invalid number of items!\n");
-                    break;
+                    return 0;
                 }
 
                 Menu *orderItems = malloc(itemCount * sizeof(Menu));
@@ -158,10 +158,11 @@ int main (){
 
                     if (!found) {
                         printf("Item not found in menu!\n");
-                        free(orderItems);
-                        break;
+                	free(orderItems); 
+			continue; 
                     }
                 }
+		break; 
 
                 Customer customer = {strdup(customerName), 0, strdup(address), strdup(email)};
                 add_order(&orderList, &orderCount, id, customer, orderItems, itemCount);
