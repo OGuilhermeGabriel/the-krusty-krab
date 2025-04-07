@@ -1,0 +1,12 @@
+123
+g,0,g,g
+2
+Burguer,cheese burguer,5.00,1
+Burguer,cheese burguer,5.00,1
+0
+456
+f,0,f,f
+2
+Coke,canned soda coke ,2.00,3
+Coke,canned soda coke ,2.00,3
+0
