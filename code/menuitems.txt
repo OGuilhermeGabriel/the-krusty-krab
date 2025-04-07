@@ -1,3 +1,4 @@
 Burguer,cheese burguer,5.00,1
 Coke,canned soda coke ,2.00,3
 French Fries,Potatos frech fries ,3.00,0
+Pudim,delicious pudim,4.00,2

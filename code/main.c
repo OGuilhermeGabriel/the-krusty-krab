@@ -2,16 +2,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "functions.h" //inclunding functions.h
 #include <unistd.h> //to do sleep() in linux/macOS
+#include "functions.h" //inclunding functions.h 
 //#include <windows.h> //uncomment this if you're in windowsOS and use Sleep(ms)
+#include "file_manager.h"
+#include "types.h"
 
 int main (){
 	Order *orderList = NULL; 
 	int orderCount = 0, menuSize = 0, option; 
 	Menu *menu = NULL; 
 
-    do {
+	//loading the menu and the orders
+	menuSize = load_menu(&menu, "menuitems.txt");
+	orderCount = load_orders(&orderList, "orders.txt");
+
+	printf("~~~ %d menu items has been loaded successfully! ~~~\n", menuSize);
+	printf("~~~ %d orders already registered has been loaded successfully! ~~~\n", orderCount);
+    
+	do {
         printf("\n=========== THE KRUSTY KRAB MAIN MENU ===========\n\n");
 	drawMrKrabs();
         printf("1. Add menu item\n");
@@ -21,6 +30,7 @@ int main (){
         printf("5. Add order\n");
         printf("6. Update order status\n");
         printf("7. List orders\n");
+	printf("8. Save menu manually\n");
         printf("0. Exit\n");
         printf("Choose an option: ");
         scanf("%d", &option);
@@ -162,7 +172,6 @@ int main (){
 			continue; 
                     }
                 }
-		break; 
 
                 Customer customer = {strdup(customerName), 0, strdup(address), strdup(email)};
                 add_order(&orderList, &orderCount, id, customer, orderItems, itemCount);
@@ -195,8 +204,18 @@ int main (){
                 list_orders(orderList, orderCount);
                 break;
 
+	    case 8:
+		clear_screen();
+		save_menu(menu, menuSize, "menuitems.txt");
+		printf("Menu saved successfully.\n");
+
             case 0:
 		clear_screen();
+		// Saving menu and orders
+		save_orders(orderList, orderCount, "orders.txt");
+		save_menu(menu, menuSize, "menuitems.txt");
+		printf("Menu and orders saved successfully.\n");
+		// Going out of the program
 		for (int i=3; i>0; i--){
 			printf("Exiting the program in... %d\n", i);
 			fflush(stdout); 
@@ -227,7 +246,8 @@ int main (){
         }
         free(orderList[i].items);
     }
-    free(orderList);
 
+    free(orderList);
+    
     return 0;
 }
